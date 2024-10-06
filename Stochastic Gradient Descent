@@ -1,0 +1,11 @@
+def stochastic_gradient_descent(gradient_function, learning_rate, steps, start):
+    current = start
+    for step in range(steps):
+        gradient = gradient_function(current)
+        current -= learning_rate * gradient
+    return current
+
+# Define a gradient function: gradient of f(x) = x^2 is 2x
+gradient_function = lambda x: 2 * x
+minimized_value = stochastic_gradient_descent(gradient_function, learning_rate=0.1, steps=100, start=10)
+print(f"SGD minimized value: {minimized_value}")
