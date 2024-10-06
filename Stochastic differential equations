@@ -1,0 +1,26 @@
+def simulate_sde(initial_value, drift, volatility, time_steps, delta_t):
+    sde_path = [initial_value]
+    current_value = initial_value
+
+    for _ in range(time_steps):
+        # Generate random noise
+        dw = np.random.normal(0, np.sqrt(delta_t))
+        # Update based on drift and volatility
+        current_value += drift * delta_t + volatility * dw
+        sde_path.append(current_value)
+
+    return sde_path
+
+# Parameters for the SDE: dx = mu * dt + sigma * dW
+initial_value = 0
+drift = 0.5
+volatility = 0.2
+time_steps = 100
+delta_t = 0.1
+
+sde_path = simulate_sde(initial_value, drift, volatility, time_steps, delta_t)
+plt.plot(sde_path)
+plt.title("Stochastic Differential Equation Simulation")
+plt.xlabel("Time step")
+plt.ylabel("Value")
+plt.show()
