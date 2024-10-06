@@ -1,0 +1,35 @@
+class ParticleFilter:
+    def __init__(self, num_particles, process_model, measurement_model, initial_distribution):
+        self.particles = initial_distribution(num_particles)
+        self.num_particles = num_particles
+        self.process_model = process_model
+        self.measurement_model = measurement_model
+
+    def predict(self):
+        self.particles = self.process_model(self.particles)
+
+    def update(self, measurement):
+        weights = self.measurement_model(self.particles, measurement)
+        weights /= np.sum(weights)
+        self.resample(weights)
+
+    def resample(self, weights):
+        indices = np.random.choice(self.num_particles, self.num_particles, p=weights)
+        self.particles = self.particles[indices]
+
+    def estimate(self):
+        return np.mean(self.particles)
+
+# Example usage
+num_particles = 1000
+initial_distribution = lambda n: np.random.uniform(0, 10, n)
+process_model = lambda particles: particles + np.random.normal(0, 0.5, len(particles))
+measurement_model = lambda particles, measurement: np.exp(-0.5 * (particles - measurement) ** 2)
+
+pf = ParticleFilter(num_particles, process_model, measurement_model, initial_distribution)
+measurements = [5 + np.random.normal(0, 1) for _ in range(10)]
+
+for measurement in measurements:
+    pf.predict()
+    pf.update(measurement)
+    print(f"Estimate after measurement {measurement}: {pf.estimate()}")
