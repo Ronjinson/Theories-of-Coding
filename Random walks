@@ -1,0 +1,18 @@
+def random_walk(steps):
+    position = 0
+    path = [position]
+
+    for _ in range(steps):
+        step = np.random.choice([-1, 1])  # Move left or right randomly
+        position += step
+        path.append(position)
+
+    return path
+
+# Generate a random walk with 100 steps
+random_walk_path = random_walk(100)
+plt.plot(random_walk_path)
+plt.title("Random Walk in 1D")
+plt.xlabel("Step")
+plt.ylabel("Position")
+plt.show()
