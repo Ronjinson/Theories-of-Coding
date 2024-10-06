@@ -1,13 +1,11 @@
 from scipy.stats import qmc
 
-def quasi_monte_carlo_integration(func, dimension, num_samples):
-    # Sobol sequence generator
+def optimized_quasi_monte_carlo_integration(func, dimension, num_samples):
     sampler = qmc.Sobol(d=dimension, scramble=True)
-    samples = sampler.random_base2(m=int(np.log2(num_samples)))
-    values = np.apply_along_axis(func, 1, samples)
+    samples = sampler.random(num_samples)
+    values = func(samples)
     return np.mean(values) * (1 ** dimension)
 
-# Define a function to integrate: e.g., f(x) = x^2
-func = lambda x: np.sum(x ** 2)
-result = quasi_monte_carlo_integration(func, dimension=2, num_samples=1024)
-print(f"Quasi-Monte Carlo integration result: {result}")
+# Define function to integrate (optimized to handle vector input directly)
+func = lambda x: np.sum(x ** 2, axis=1)
+result = optimized_quasi_monte_carlo_integration(func, dimension=2, num_samples=1024)
