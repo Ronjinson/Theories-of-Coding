@@ -1,0 +1,12 @@
+def importance_sampling(target_density, proposal_density, proposal_sampler, num_samples):
+    samples = proposal_sampler(num_samples)
+    weights = target_density(samples) / proposal_density(samples)
+    return np.mean(weights * samples)
+
+# Target: N(0, 1), Proposal: N(2, 1)
+target_density = lambda x: np.exp(-0.5 * x ** 2) / np.sqrt(2 * np.pi)
+proposal_density = lambda x: np.exp(-0.5 * (x - 2) ** 2) / np.sqrt(2 * np.pi)
+proposal_sampler = lambda n: np.random.normal(2, 1, n)
+
+estimate = importance_sampling(target_density, proposal_density, proposal_sampler, num_samples=10000)
+print(f"Importance sampling estimate: {estimate}")
