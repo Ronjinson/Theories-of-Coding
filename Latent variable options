@@ -1,0 +1,19 @@
+from sklearn.mixture import GaussianMixture
+
+def fit_gmm(data, num_components):
+    gmm = GaussianMixture(n_components=num_components, random_state=0)
+    gmm.fit(data.reshape(-1, 1))
+    return gmm
+
+# Generate synthetic data from two Gaussian distributions
+data = np.concatenate([np.random.normal(-2, 1, 500), np.random.normal(3, 1, 500)])
+gmm = fit_gmm(data, num_components=2)
+
+# Plot the data and GMM components
+x = np.linspace(-6, 8, 1000).reshape(-1, 1)
+pdf = np.exp(gmm.score_samples(x))
+plt.hist(data, bins=30, density=True, alpha=0.5)
+plt.plot(x, pdf, label="GMM PDF")
+plt.title("Gaussian Mixture Model Fitting")
+plt.legend()
+plt.show()
