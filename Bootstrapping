@@ -1,0 +1,12 @@
+def bootstrap(data, num_bootstrap_samples):
+    n = len(data)
+    bootstrap_samples = np.random.choice(data, (num_bootstrap_samples, n), replace=True)
+    bootstrap_means = np.mean(bootstrap_samples, axis=1)
+    return bootstrap_means
+
+# Original dataset
+data = np.random.normal(0, 1, 100)
+bootstrap_means = bootstrap(data, 1000)
+mean_estimate = np.mean(bootstrap_means)
+ci_lower, ci_upper = np.percentile(bootstrap_means, [2.5, 97.5])
+print(f"Bootstrap mean estimate: {mean_estimate}, 95% CI: ({ci_lower}, {ci_upper})")
