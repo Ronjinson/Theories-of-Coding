@@ -1,0 +1,13 @@
+def antithetic_variates(func, num_samples):
+    # Generate random samples and their antithetic variates
+    uniform_samples = np.random.uniform(0, 1, num_samples)
+    antithetic_samples = 1 - uniform_samples
+
+    # Compute the average value of the function for both sets of samples
+    estimates = (func(uniform_samples) + func(antithetic_samples)) / 2
+    return np.mean(estimates)
+
+# Define a function to integrate: e.g., f(x) = x^2
+func = lambda x: x ** 2
+result = antithetic_variates(func, num_samples=10000)
+print(f"Antithetic Variates integration result: {result}")
