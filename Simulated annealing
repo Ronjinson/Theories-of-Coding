@@ -1,0 +1,24 @@
+def simulated_annealing(cost_function, initial_solution, temperature, cooling_rate, steps):
+    current_solution = initial_solution
+    current_cost = cost_function(current_solution)
+
+    for step in range(steps):
+        # Propose a new solution by adding random noise
+        new_solution = current_solution + np.random.normal(0, 1)
+        new_cost = cost_function(new_solution)
+
+        # Calculate acceptance probability
+        acceptance_prob = np.exp((current_cost - new_cost) / temperature)
+        if new_cost < current_cost or np.random.rand() < acceptance_prob:
+            current_solution = new_solution
+            current_cost = new_cost
+
+        # Cool down
+        temperature *= cooling_rate
+
+    return current_solution
+
+# Define a cost function: f(x) = x^2
+cost_function = lambda x: x ** 2
+best_solution = simulated_annealing(cost_function, initial_solution=10, temperature=100, cooling_rate=0.99, steps=1000)
+print(f"Best solution found: {best_solution}")
