@@ -1,0 +1,25 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+def metropolis_hastings(target_density, proposal_width, steps, start):
+    samples = [start]
+    current = start
+
+    for _ in range(steps):
+        # Propose a new point by sampling from a normal distribution centered at the current value
+        proposed = np.random.normal(current, proposal_width)
+        # Calculate acceptance ratio
+        acceptance_ratio = target_density(proposed) / target_density(current)
+        if np.random.rand() < acceptance_ratio:
+            current = proposed
+        samples.append(current)
+    
+    return samples
+
+# Define the target density: standard normal distribution
+target_density = lambda x: np.exp(-0.5 * x ** 2) / np.sqrt(2 * np.pi)
+
+samples = metropolis_hastings(target_density, proposal_width=1, steps=10000, start=0)
+plt.hist(samples, bins=50, density=True)
+plt.title("Metropolis-Hastings Sampling")
+plt.show()
